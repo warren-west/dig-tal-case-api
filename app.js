@@ -3,8 +3,10 @@ const express = require('express')
 const app = express()
 const db = require('./models')
 const { seedDatabaseIfEmpty } = require('./models/seedDb')
+const cors = require('cors')
 
 // use middleware routes
+app.use(cors())
 app.use(express.json())
 
 // import routes
