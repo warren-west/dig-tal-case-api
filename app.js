@@ -24,8 +24,9 @@ db.mongoose.connect(process.env.MONGODB_URI)
         await seedDatabaseIfEmpty()
 
         // Start Express server after successful DB connection
-        app.listen(3000, () => {
-            console.log(`Server is listening on port 3000...`)
+        const port = process.env.PORT || 3000
+        app.listen(port, () => {
+            console.log(`Server is listening on port ${ port }...`)
         })
     })
     .catch((error) => {
