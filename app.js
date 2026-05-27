@@ -8,9 +8,11 @@ const { seedDatabaseIfEmpty } = require('./models/seedDb')
 app.use(express.json())
 
 // import routes
+const indexRouter = require('./routes/index')
 const userRouter = require('./routes/users')
 
 // connect routes
+app.use('/', indexRouter)
 app.use('/users', userRouter)
 
 // Attempt DB connection
