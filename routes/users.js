@@ -1,5 +1,6 @@
 require('dotenv').config()
 const router = require('express').Router()
+const { isAdminToken } = require('../middleware/isAdmin')
 const db = require('../models')
 const jwt = require('jsonwebtoken')
 
@@ -70,20 +71,27 @@ router.post('/login', async (req, res) => {
     if (!passwordBody) return res.status(400).json({ message: "No password provided." })
 
     try {
-        const user = await db.User.findOne({ username }).lean()
-        console.log(user)
+        const user = await db.User.findOne({ username }).select('-__v').lean()
 
         // user doesn't exist
         if (!user) return res.status(404).json({ message: `404: ${username} does not exist.` })
 
         if (user.password !== passwordBody) return res.status(401).json({ message: "Incorrect login credentials." })
 
-        const { password, ...rest } = user
+        const responsePayload = {
+            _id: user._id,
+            username: user.username,
+            role: user.role,
+            favJokes: user.jokes,
+            pokemon: user.pokemon,
+            watchlist: user.shows,
+            wishlist: user.products,
+        }
 
-        const token = jwt.sign({ ...rest }, process.env.JWT_SECRET, { expiresIn: '2h' })
+        const token = jwt.sign(responsePayload, process.env.JWT_SECRET, { expiresIn: '2h' })
 
         // TODO: Configure return object
-        return res.json({ token, ...rest })
+        return res.json({ token, ...responsePayload })
 
     } catch (err) {
         console.log(err)
@@ -171,6 +179,24 @@ router.post('/:username/wishlist', async (req, res) => {
         if (!updatedUser) return res.status(404).json({ error: "User not found" })
 
         res.json({ message: "Wishlist updated", wishlist: updatedUser.products })
+    } catch (error) {
+        res.status(500).json({ error: "Database update failed" })
+    }
+})
+
+// PROTECTED ROUTE [ADMIN]
+// PUT /users/:username/promote
+router.put('/:username/promote', isAdminToken, async (req, res) => {
+    try {
+        const updatedUser = await db.User.findOneAndUpdate(
+            { username: req.params.username },
+            { $set: { role: "ADMIN" } },
+            { new: true }
+        )
+
+        if (!updatedUser) return res.status(404).json({ error: "User not found" })
+
+        res.json({ message: `User '${updatedUser.username}' role set to ADMIN.` })
     } catch (error) {
         res.status(500).json({ error: "Database update failed" })
     }
