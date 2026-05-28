@@ -1,6 +1,9 @@
 # Digitale Talenter Case Project API
 An API to support `User` functionality in the Digitale Talenter case projects.
 
+## Base URL
+The API's base URL is: `https://dig-tal-case-api-emdpbma2bte6ftgz.westeurope-01.azurewebsites.net`. All of the paths listed below as endpoints should be appended to this base URL.
+
 ## Endpoints
 
 ### `GET` `/users/:username`
