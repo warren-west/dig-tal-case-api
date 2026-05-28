@@ -14,6 +14,7 @@ router.get('/:username', async (req, res) => {
 
         const responsePayload = {
             username: user.username,
+            role: user.role,
             pokemon: user.pokemon || [],
             watchlist: user.shows || [],
             favJokes: user.jokes || [],

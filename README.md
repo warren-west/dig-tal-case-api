@@ -9,6 +9,7 @@ Get the details of the user provided in the `:username` field.
 ```json
 {
     "username": "warren-west",
+    "role": "ADMIN",
     "pokemon": [
         55,
         1
