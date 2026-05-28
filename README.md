@@ -143,3 +143,63 @@ Upgrades the given user's role from `"GUEST"` to `"ADMIN"`. This is a protected 
     "message": "User 'warren-west' role set to ADMIN."
 }
 ```
+
+### `DELETE` `/users/:username/jokes`
+#### (Team Funny Bucket)
+Remove a joke from the given user's favourite jokes. The request requires a `jokeId` field.
+
+```json
+{
+    "message": "Joke removed successfully",
+    "favJokes": [
+        113
+    ]
+}
+```
+
+### `DELETE` `/users/:username/pokemon`
+#### (Team Pokemon)
+Release a pokemon from the given user's pokemon collection. The request requires a `pokemonId` field.
+
+```json
+{
+    "message": "Pokemon removed successfully",
+    "pokemon": [
+        55
+    ]
+}
+```
+
+### `DELETE` `/users/:username/watchlist`
+#### (Team Binged)
+Remove a TV show from the given user's watchlist. The request requires a `showId` field.
+
+```json
+{
+    "message": "Show removed successfully",
+    "watchlist": [
+        13
+    ]
+}
+```
+
+### `DELETE` `/users/:username/wishlist`
+#### (Team eBuy)
+Remove a product from the given user's wishlist. The request requires a `productId` field.
+
+```json
+{
+    "message": "Product removed successfully",
+    "wishlist": [
+        14
+    ]
+}
+```
+
+## Credits
+
+Developed by @warren-west at &copy; Noroff Fagskole AS
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

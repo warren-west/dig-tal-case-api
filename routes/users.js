@@ -185,6 +185,110 @@ router.post('/:username/wishlist', async (req, res) => {
     }
 })
 
+// DELETE /users/:username/pokemon
+router.delete('/:username/pokemon', async (req, res) => {
+    try {
+        const { username } = req.params
+        const { pokemonId } = req.body
+
+        if (!pokemonId) return res.status(400).json({ error: "pokemonId is required" })
+
+        const updatedUser = await db.User.findOneAndUpdate(
+            { username: username },
+            { $pull: { pokemon: pokemonId } },
+            { returnDocument: 'after', select: 'username pokemon' }
+        ).lean()
+
+        if (!updatedUser) return res.status(404).json({ error: "User not found" })
+
+        res.json({
+            message: "Pokemon removed successfully",
+            pokemon: updatedUser.pokemon
+        })
+    } catch (error) {
+        console.error("Delete pokemon error:", error)
+        res.status(500).json({ error: "Internal Server Error" })
+    }
+})
+
+// DELETE /users/:username/jokes
+router.delete('/:username/jokes', async (req, res) => {
+    try {
+        const { username } = req.params
+        const { jokeId } = req.body
+
+        if (!jokeId) return res.status(400).json({ error: "jokeId is required" })
+
+        const updatedUser = await db.User.findOneAndUpdate(
+            { username: username },
+            { $pull: { jokes: jokeId } },
+            { returnDocument: 'after', select: 'username jokes' }
+        ).lean()
+
+        if (!updatedUser) return res.status(404).json({ error: "User not found" })
+
+        res.json({
+            message: "Joke removed successfully",
+            jokes: updatedUser.jokes
+        })
+    } catch (error) {
+        console.error("Delete joke error:", error)
+        res.status(500).json({ error: "Internal Server Error" })
+    }
+})
+
+// DELETE /users/:username/watchlist
+router.delete('/:username/watchlist', async (req, res) => {
+    try {
+        const { username } = req.params
+        const { showId } = req.body
+
+        if (!showId) return res.status(400).json({ error: "showId is required" })
+
+        const updatedUser = await db.User.findOneAndUpdate(
+            { username: username },
+            { $pull: { shows: showId } },
+            { returnDocument: 'after', select: 'username shows' }
+        ).lean()
+
+        if (!updatedUser) return res.status(404).json({ error: "User not found" })
+
+        res.json({
+            message: "Show removed successfully",
+            watchlist: updatedUser.shows
+        })
+    } catch (error) {
+        console.error("Delete show error:", error)
+        res.status(500).json({ error: "Internal Server Error" })
+    }
+})
+
+// DELETE /users/:username/wishlist
+router.delete('/:username/wishlist', async (req, res) => {
+    try {
+        const { username } = req.params
+        const { productId } = req.body
+
+        if (!productId) return res.status(400).json({ error: "productId is required" })
+
+        const updatedUser = await db.User.findOneAndUpdate(
+            { username: username },
+            { $pull: { products: productId } },
+            { returnDocument: 'after', select: 'username products' }
+        ).lean()
+
+        if (!updatedUser) return res.status(404).json({ error: "User not found" })
+
+        res.json({
+            message: "Product removed successfully",
+            wishlist: updatedUser.products
+        })
+    } catch (error) {
+        console.error("Delete product error:", error)
+        res.status(500).json({ error: "Internal Server Error" })
+    }
+})
+
 // PROTECTED ROUTE [ADMIN]
 // PUT /users/:username/promote
 router.put('/:username/promote', isAdminToken, async (req, res) => {
